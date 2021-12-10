@@ -37,6 +37,7 @@ class _MyAppState extends State<MyApp> {
             initialData: null,
             create:(context) => AuthService().user,
             child: MaterialApp(
+              theme: ThemeData(primaryColor: Colors.brown,accentColor: Colors.brown[900]),
               home: Wrapper(),
               ),
           );

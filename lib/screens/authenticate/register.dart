@@ -3,25 +3,23 @@ import 'package:brew_crew/shared/constants.dart';
 import 'package:brew_crew/shared/loading.dart';
 import 'package:flutter/material.dart';
 
-class SignIn extends StatefulWidget {
-  SignIn({Key? key, required this.toggleView}) : super(key: key);
+class Register extends StatefulWidget {
+  Register({Key? key, required this.toggleView}) : super(key: key);
 
   final Function toggleView;
 
   @override
-  _SignInState createState() => _SignInState();
+  _RegisterState createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
 
-  //textfield state
   String email = '';
   String password = '';
-
-  String error = 'Invalid credentials';
+  String error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +28,11 @@ class _SignInState extends State<SignIn> {
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
-        title: Text('Sign in'),
+        title: Text('Register'),
         actions: [
           TextButton.icon(
             icon: Icon(Icons.person),
-            label: Text('Register'),
+            label: Text('Sign In'),
             onPressed: () => widget.toggleView(),
             style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.all(Colors.white)),
@@ -52,7 +50,7 @@ class _SignInState extends State<SignIn> {
                     SizedBox(height: 20.0),
                     TextFormField(
                       validator: (value) =>
-                          value!.isEmpty ? 'Enter email' : null,
+                          value!.isEmpty ? 'Enter an email' : null,
                       onChanged: (val) {
                         setState(() {
                           email = val;
@@ -64,20 +62,18 @@ class _SignInState extends State<SignIn> {
                     SizedBox(height: 15.0),
                     TextFormField(
                       obscureText: true,
-                      validator: (value) =>
-                          value!.isEmpty ? 'Enter password' : null,
                       decoration:
                           textInputDecoration.copyWith(hintText: 'Password'),
+                      validator: (value) => value!.length < 6
+                          ? 'Password should be at least 6 characters'
+                          : null,
                       onChanged: (value) {
                         setState(() {
                           password = value;
                         });
                       },
                     ),
-                    Text(
-                      error,
-                      style: TextStyle(color: Colors.red),
-                    ),
+                    Text(error,style: TextStyle(color: Colors.red),),
                     SizedBox(height: 20.0),
                     ElevatedButton(
                       style: ButtonStyle(
@@ -89,11 +85,12 @@ class _SignInState extends State<SignIn> {
                           setState(() {
                             email = email.trim();
                             password = password.trim();
-                            loading = true;
+
+                            //loading = true;
                           });
+                          print('loading...');
                           dynamic result = await _auth
-                              .signInWithEmailAndPassword(email, password);
-                          
+                              .registerWithEmailAndPassword(email, password);
                           if (result == null) {
                             setState(() {
                               error = 'Invalid credentials';
@@ -102,7 +99,7 @@ class _SignInState extends State<SignIn> {
                           }
                         }
                       },
-                      child: Text('Sign In'),
+                      child: Text('Register'),
                     ),
                   ],
                 ),
