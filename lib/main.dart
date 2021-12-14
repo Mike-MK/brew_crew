@@ -1,6 +1,7 @@
 import 'package:brew_crew/models/user.dart';
 import 'package:brew_crew/screens/wrapper.dart';
 import 'package:brew_crew/services/auth.dart';
+import 'package:brew_crew/shared/loading.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +35,9 @@ class _MyAppState extends State<MyApp> {
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
           return StreamProvider<MUser?>(
-            initialData: null,
+            lazy: false,
+            //find better flow
+            initialData: MUser(uid:'init'),
             create:(context) => AuthService().user,
             child: MaterialApp(
               theme: ThemeData(primaryColor: Colors.brown,accentColor: Colors.brown[900]),
@@ -44,9 +47,8 @@ class _MyAppState extends State<MyApp> {
         }
 
         // Otherwise, show something whilst waiting for initialization to complete
-        return MaterialApp(home: Text('Loading'));
+        return MaterialApp(home: Scaffold(body: Loading(),));
       },
-    );
-    
+    );   
   }
 }

@@ -25,7 +25,7 @@ class AuthService{
   Stream<MUser?> get user{
     return _auth.authStateChanges()
       .map(_userFromFirebaseUser);
-      }
+  }
   //sign in with email and password
   Future signInWithEmailAndPassword(String email,String password) async{
     try {
